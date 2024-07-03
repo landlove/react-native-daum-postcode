@@ -1,20 +1,18 @@
 {
-  "name": "@actbase/react-daum-postcode",
+  "name": "react-native-daum-postcode",
   "version": "1.0.4",
   "description": "다음 우편번호찾기 for React, React-Native",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "build:src": "rm -rf ./lib && tsc -p src/tsconfig.json && babel lib --out-dir lib",
-    "build": "npm run build:src ",
-    "prepublish": "npm run build",
-    "localinstall": "npm run build && rm -rf /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode/lib && cp -r ./lib /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf ./lib && tsc -p src/tsconfig.json && babel lib --out-dir lib",
+    "prepublish": "yarn build",
+    "localinstall": "npm run build && rm -rf /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode/lib && cp -r ./lib /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actbase/react-daum-postcode.git"
+    "url": "https://github.com/mym0404/react-native-daum-postcode"
   },
   "keywords": [
     "react",
@@ -37,15 +35,11 @@
     "react-native daum postcode"
   ],
   "author": {
-    "name": "Actbase LLC",
-    "email": "project@actbase.io",
-    "url": "https://da.actbase.io"
+    "name": "MJ Studio",
+    "email": "mym0404@gmail.com"
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/actbase/react-daum-postcode/issues"
-  },
-  "homepage": "https://github.com/actbase/react-daum-postcode#readme",
+  "homepage": "https://github.com/mym0404/react-native-daum-postcode",
   "devDependencies": {
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
@@ -85,6 +79,7 @@
     "ts-jest": "^25.2.0",
     "ts-node": "^8.6.2",
     "tslib": "^1.11.1",
-    "typescript": "^3.8.3"
-  }
+    "typescript": "5.4.5"
+  },
+  "packageManager": "yarn@4.3.1"
 }
