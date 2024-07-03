@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { OnCompleteParams, PostcodeProps } from './types';
+import type { OnCompleteParams, PostcodeProps } from './types';
 
 const getJSApi = (): Promise<any> => {
   return new Promise((resolve, reject) => {
-    if (typeof window === 'undefined') reject({ message: 'unsupported platform' });
+    if (typeof window === 'undefined')
+      reject({ message: 'unsupported platform' });
     // @ts-ignore
     const postcodeSDK = window.daum?.Postcode;
     if (postcodeSDK) {
@@ -22,7 +23,11 @@ const getJSApi = (): Promise<any> => {
   });
 };
 
-const Postcode: React.FC<PostcodeProps> = ({ onSelected, jsOptions, style }) => {
+const Postcode: React.FC<PostcodeProps> = ({
+  onSelected,
+  jsOptions,
+  style,
+}) => {
   const layer = React.useRef<HTMLDivElement>(null);
 
   const loadData = React.useCallback(async () => {
@@ -32,14 +37,15 @@ const Postcode: React.FC<PostcodeProps> = ({ onSelected, jsOptions, style }) => 
       new window.daum.Postcode({
         ...jsOptions,
         width: '100%',
-        oncomplete: function(data: OnCompleteParams) {
+        oncomplete: function (data: OnCompleteParams) {
           onSelected(data);
         },
-        onclose: function() {
+        onclose: function () {
           loadData();
         },
       }).embed(layer.current, { autoClose: false });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onSelected]);
 
   React.useEffect(() => {

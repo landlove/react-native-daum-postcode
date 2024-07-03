@@ -1,14 +1,15 @@
 {
-  "name": "react-native-daum-postcode",
+  "name": "@mj-studio/react-native-daum-postcode",
   "version": "1.0.4",
   "description": "다음 우편번호찾기 for React, React-Native",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf ./lib && tsc -p src/tsconfig.json && babel lib --out-dir lib",
+    "build": "bob build",
     "prepublish": "yarn build",
-    "localinstall": "npm run build && rm -rf /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode/lib && cp -r ./lib /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode"
+    "localinstall": "npm run build && rm -rf /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode/lib && cp -r ./lib /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode",
+    "t": "eslint src && tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -38,48 +39,74 @@
     "name": "MJ Studio",
     "email": "mym0404@gmail.com"
   },
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "ios",
+    "cpp",
+    "*.podspec",
+    "app.plugin.js",
+    "expo-config-plugin/build/index.js",
+    "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "!**/.*"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/mym0404/react-native-daum-postcode",
   "devDependencies": {
-    "@babel/cli": "^7.6.2",
-    "@babel/core": "^7.6.2",
-    "@babel/node": "^7.7.7",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/plugin-transform-modules-commonjs": "^7.7.5",
-    "@babel/plugin-transform-react-jsx": "^7.8.3",
-    "@babel/preset-env": "^7.7.7",
-    "@babel/preset-react": "^7.7.4",
+    "@react-native/eslint-config": "^0.74.80",
     "@types/lodash": "^4.14.149",
-    "@types/react": "^16.9.31",
-    "@types/react-dom": "^16.9.5",
+    "@types/react": "^18.2.44",
+    "@types/react-dom": "^18.3.0",
     "@types/react-native": "0.61.12",
-    "@typescript-eslint/eslint-plugin": "^2.23.0",
-    "@typescript-eslint/parser": "^2.23.0",
-    "babel-eslint": "^10.0.3",
-    "babel-plugin-inline-import-data-uri": "^1.0.1",
-    "commander": "^4.1.1",
-    "esifycss": "^1.4.12",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-config-react-native-shinpei": "^0.2.0",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-json": "^2.1.0",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.18.3",
-    "eslint-plugin-react-hooks": "^2.5.0",
-    "eslint-plugin-react-native": "^3.8.1",
-    "inquirer": "^7.3.3",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "jest": "^25.1.0",
-    "prettier": "^1.19.1",
+    "prettier": "^3.0.3",
     "react": "*",
     "react-native": "*",
+    "react-native-builder-bob": "^0.20.0",
     "react-native-webview": "*",
-    "ts-jest": "^25.2.0",
-    "ts-node": "^8.6.2",
-    "tslib": "^1.11.1",
+    "release-it": "^17.4.1",
     "typescript": "5.4.5"
   },
-  "packageManager": "yarn@4.3.1"
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version} [skip ci]",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": false
+    }
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  },
+  "packageManager": "yarn@4.3.1",
+  "dependencies": {
+    "@mj-studio/react-util": "^0.0.20"
+  }
 }

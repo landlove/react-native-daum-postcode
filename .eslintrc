@@ -1,15 +1,21 @@
 {
-  "parserOptions": {
-    "ecmaVersion": "2018",
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true,
-      "modules": true,
-      "experimentalObjectRestSpread": true
-    }
-  },
-  "parser": "babel-eslint",
-  "plugins": ["react"],
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
-  "globals": { "Promise": true, "setTimeout": true, "FormData": true }
+  "root": true,
+  "extends": [
+    "@react-native",
+    "prettier"
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "quoteProps": "consistent",
+        "singleQuote": true,
+        "tabWidth": 2,
+        "trailingComma": "es5",
+        "useTabs": false
+      }
+    ],
+    "react-native/no-inline-styles": "off",
+    "@typescript-eslint/no-unused-vars": "off"
+  }
 }

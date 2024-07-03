@@ -1,3 +1,5 @@
+import type { ViewStyle, StyleProp } from 'react-native';
+
 export interface OnCompleteParams {
   /**
    * 국가기초구역번호. 2015년 8월 1일부터 시행될 새 우편번호.
@@ -313,10 +315,21 @@ export interface JSOptions {
   theme?: PostcodeTheme;
 }
 
-type FlexAlignType = 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
+type FlexAlignType =
+  | 'flex-start'
+  | 'flex-end'
+  | 'center'
+  | 'stretch'
+  | 'baseline';
 
 export interface StyleProps {
-  alignContent?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'space-between' | 'space-around';
+  alignContent?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'stretch'
+    | 'space-between'
+    | 'space-around';
   alignItems?: FlexAlignType;
   alignSelf?: 'auto' | FlexAlignType;
   aspectRatio?: number;
@@ -337,7 +350,13 @@ export interface StyleProps {
   flexShrink?: number;
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
   height?: number | string;
-  justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
+  justifyContent?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly';
   left?: number | string;
   margin?: number | string;
   marginBottom?: number | string;
@@ -392,5 +411,5 @@ export interface PostcodeProps {
    */
   onError: (error: unknown) => void;
 
-  style?: StyleProps;
+  style?: StyleProp<ViewStyle>;
 }

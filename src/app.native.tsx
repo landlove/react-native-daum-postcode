@@ -1,8 +1,8 @@
-import * as React from 'react';
-
-import WebView from 'react-native-webview';
-import { PostcodeProps } from './types';
+import type { PostcodeProps } from './types';
 import { Linking, View } from 'react-native';
+import { useStableCallback } from '@mj-studio/react-util';
+import React, { useMemo } from 'react';
+import WebView, { type WebViewMessageEvent } from 'react-native-webview';
 
 const html = `
 <!DOCTYPE html>
@@ -51,19 +51,23 @@ const html = `
 </html>
 `;
 
-const Postcode: React.FC<PostcodeProps> = (props: PostcodeProps) => {
+const Postcode = (props: PostcodeProps) => {
   const { jsOptions, onSelected, onError, style, ...otherProps } = props;
-  const injectedJavaScript = React.useMemo(() => `initOnReady(${JSON.stringify(jsOptions)});void(0);`, [jsOptions]);
+  const injectedJavaScript = useMemo(
+    () => `initOnReady(${JSON.stringify(jsOptions)});void(0);`,
+    [jsOptions]
+  );
 
-  const onMessage = React.useCallback(
-    ({ nativeEvent }) => {
+  const onMessage = useStableCallback(
+    ({ nativeEvent }: WebViewMessageEvent) => {
       try {
-        nativeEvent.data && onSelected && onSelected(JSON.parse(nativeEvent.data));
+        nativeEvent.data &&
+          onSelected &&
+          onSelected(JSON.parse(nativeEvent.data));
       } catch (e) {
         onError(e);
       }
-    },
-    [onSelected],
+    }
   );
 
   return (
@@ -77,7 +81,7 @@ const Postcode: React.FC<PostcodeProps> = (props: PostcodeProps) => {
         source={{ html, baseUrl: 'https://postcode.map.daum.net' }}
         onMessage={onMessage}
         injectedJavaScript={injectedJavaScript}
-        onShouldStartLoadWithRequest={request => {
+        onShouldStartLoadWithRequest={(request) => {
           const isPostcode =
             !request.url?.startsWith('https://postcode.map.daum.net/guide') &&
             (!request.url?.startsWith('http') ||
