@@ -1,5 +1,5 @@
 {
-  "name": "@mj-studio/react-native-daum-postcode",
+  "name": "react-native-daum-postcode",
   "version": "1.0.4",
   "description": "다음 우편번호찾기 for React, React-Native",
   "main": "lib/index.js",
