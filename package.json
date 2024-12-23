@@ -1,10 +1,10 @@
 {
-  "name": "@mj-studio/react-native-daum-postcode",
+  "name": "landlove/react-native-daum-postcode",
   "version": "2.0.1",
   "description": "다음 우편번호찾기 for React, React-Native",
-  "main": "lib/index.js",
-  "module": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "src/app.native.tsx",
+  "module": "src/app.tsx",
+  "typings": "src/types.ts",
   "scripts": {
     "build": "bob build",
     "prepublish": "yarn build",
@@ -36,8 +36,8 @@
     "react-native daum postcode"
   ],
   "author": {
-    "name": "MJ Studio",
-    "email": "mym0404@gmail.com"
+    "name": "landlove react-native-daum-postcode",
+    "email": "landloveg@gmail.com"
   },
   "files": [
     "src",
