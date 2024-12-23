@@ -1,59 +1,122 @@
-import * as React from 'react';
-import type { OnCompleteParams, PostcodeProps } from './types';
+import type { PostcodeProps } from './types';
+import { Linking, View } from 'react-native';
+import { useStableCallback } from '@mj-studio/react-util';
+import React, { useMemo } from 'react';
+import WebView, { type WebViewMessageEvent } from 'react-native-webview';
 
-const getJSApi = (): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    if (typeof window === 'undefined')
-      reject({ message: 'unsupported platform' });
-    // @ts-ignore
-    const postcodeSDK = window.daum?.Postcode;
-    if (postcodeSDK) {
-      resolve(postcodeSDK);
-      return;
+const html = `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <style> 
+    * { box-sizing: border-box }
+    html, body { width: 100%; height: 100%; margin:0px; padding: 0px; background-color: #ececec; } 
+  </style>
+</head>
+<body>
+  <div id="layer" style="width:100%; min-height: 100%;"></div>
+  <script type="text/javascript">
+    function callback() {
+      var element_layer = document.getElementById('layer');
+      element_layer.innerHTML = "";
+      new daum.Postcode({
+        ...window.options,
+        onsearch: function () {
+          window.scrollTo(0, 0);
+        },
+        oncomplete: function(data) {
+          window.ReactNativeWebView.postMessage(JSON.stringify(data));
+        },
+        onresize: function(size) {
+          document.getElementById('layer').style.height = size.height + 'px';
+        },
+        onclose: function() {
+          callback();
+        },
+        width : '100%',
+        height: '100%',
+      }).embed(element_layer);
     }
+    function initOnReady(options) {
+      window.options = options;
+      var s = document.createElement('script');
+      s.type = 'text/javascript'; s.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+      s.onreadystatechange = callback; s.onload = callback;
+      var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+    }
+  </script>
+</body>
+</html>
+`;
 
-    const jsapi = document.createElement('script');
-    jsapi.type = 'text/javascript';
-    jsapi.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
-    const s = document.getElementsByTagName('script')[0];
-    s?.parentNode?.insertBefore(jsapi, s);
-    // @ts-ignore
-    jsapi.onload = () => resolve(window.daum.Postcode);
-    jsapi.onabort = jsapi.onerror = reject;
-  });
-};
-
-const Postcode: React.FC<PostcodeProps> = ({
+const Postcode = ({
+  jsOptions = {},
   onSelected,
-  jsOptions,
+  onError,
   style,
-}) => {
-  const layer = React.useRef<HTMLDivElement>(null);
+  ...otherProps
+}: PostcodeProps) => {
+  const mergedJsOptions = useMemo(
+    () => ({ hideMapBtn: true, ...jsOptions }),
+    [jsOptions]
+  );
 
-  const loadData = React.useCallback(async () => {
-    const Postcode = await getJSApi();
-    if (Postcode) {
-      // @ts-ignore
-      new window.daum.Postcode({
-        ...jsOptions,
-        width: '100%',
-        oncomplete: function (data: OnCompleteParams) {
-          onSelected(data);
-        },
-        onclose: function () {
-          loadData();
-        },
-      }).embed(layer.current, { autoClose: false });
+  const injectedJavaScript = useMemo(
+    () => {
+      try {
+        return `initOnReady(${JSON.stringify(mergedJsOptions)});void(0);`;
+      } catch (e) {
+        console.error('Error in injectedJavaScript:', e);
+        return ''; // JavaScript 코드 오류 처리
+      }
+    },
+    [mergedJsOptions]
+  );
+
+  const onMessage = useStableCallback(
+    ({ nativeEvent }: WebViewMessageEvent) => {
+      try {
+        if (nativeEvent.data) {
+          const data = JSON.parse(nativeEvent.data);
+          if (onSelected) {
+            onSelected(data);
+          }
+        }
+      } catch (e) {
+        console.error('Error parsing message:', e);
+        onError?.(e);
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onSelected]);
+  );
 
-  React.useEffect(() => {
-    loadData().catch(console.warn);
-  }, [loadData]);
-
-  // @ts-ignore
-  return <div ref={layer} style={style} />;
+  return (
+    <View style={style}>
+      <WebView
+        mixedContentMode={'compatibility'}
+        androidLayerType="hardware"
+        renderToHardwareTextureAndroid={true}
+        useWebKit={true}
+        {...otherProps}
+        source={{ html, baseUrl: 'https://postcode.map.daum.net' }}
+        onMessage={onMessage}
+        injectedJavaScript={injectedJavaScript}
+        onShouldStartLoadWithRequest={(request) => {
+          const isPostcode =
+            !request.url?.startsWith('https://postcode.map.daum.net/guide') &&
+            (request.url?.startsWith('https://postcode.map.daum.net') ||
+             request.url?.startsWith('http://postcode.map.daum.net'));
+          if (!isPostcode) {
+            Linking.openURL(request.url);
+            return false;
+          } else {
+            return true;
+          }
+        }}
+      />
+    </View>
+  );
 };
 
 export default Postcode;
