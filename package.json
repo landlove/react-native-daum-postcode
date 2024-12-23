@@ -1,5 +1,5 @@
 {
-  "name": "landlove/react-native-daum-postcode",
+  "name": "@landlove/react-native-daum-postcode",
   "version": "2.0.1",
   "description": "다음 우편번호찾기 for React, React-Native",
   "main": "src/app.native.tsx",
@@ -8,12 +8,12 @@
   "scripts": {
     "build": "bob build",
     "prepublish": "yarn build",
-    "localinstall": "npm run build && rm -rf /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode/lib && cp -r ./lib /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@actbase/react-daum-postcode",
+    "localinstall": "npm run build && rm -rf /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@landlove/react-native-daum-postcode/lib && cp -r ./lib /Users/suhanmoon/Projects/bankmall/bankmall-front/node_modules/@landlove/react-native-daum-postcode",
     "t": "eslint src && tsc --noEmit"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mym0404/react-native-daum-postcode"
+    "url": "https://github.com/landlove/react-native-daum-postcode"
   },
   "keywords": [
     "react",
@@ -60,7 +60,7 @@
     "!**/.*"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/mym0404/react-native-daum-postcode",
+  "homepage": "https://github.com/landlove/react-native-daum-postcode",
   "devDependencies": {
     "@react-native/eslint-config": "^0.74.80",
     "@types/lodash": "^4.14.149",
